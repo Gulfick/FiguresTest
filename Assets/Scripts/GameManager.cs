@@ -16,6 +16,7 @@ public class GameManager: IStartable, ITickable
     private List<string> _names = new List<string>();
     private List<string> _namesClicked = new List<string>();
     private bool _notFirst;
+    private UniTask _task;
 
     public GameManager(LineClick lineClick, FigureChecker figureChecker, MainUI mainUI, TargetCheck targetCheck)
     {
@@ -36,6 +37,7 @@ public class GameManager: IStartable, ITickable
         }
 
         _mainUI.NamesList.GetComponent<TextMeshProUGUI>().text = builder.ToString();
+        _mainUI.SpaceButton.onClick.AddListener(CallNewNames);
         _lineClick.OnLineClick += CompareNames;
     }
     
@@ -45,6 +47,11 @@ public class GameManager: IStartable, ITickable
         {
             await NewNames();
         }
+    }
+
+    private async void CallNewNames()
+    {
+        await NewNames();
     }
 
     private async UniTask NewNames()
