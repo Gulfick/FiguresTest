@@ -10,13 +10,19 @@ public class TargetCheck : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        IsTriggered = true;
-        _onEnter?.Invoke();
+        if (other.gameObject.layer == LayerMask.NameToLayer("Target"))
+        {
+            IsTriggered = true;
+            _onEnter?.Invoke();
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        IsTriggered = false;
-        _onExit?.Invoke();
+        if (other.gameObject.layer == LayerMask.NameToLayer("Target"))
+        {
+            IsTriggered = false;
+            _onExit?.Invoke();
+        }
     }
 }

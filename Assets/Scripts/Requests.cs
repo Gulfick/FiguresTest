@@ -19,12 +19,15 @@ public static class Requests
         if (www.result != UnityWebRequest.Result.Success)
         {
             Debug.Log("Error: " + www.error);
+            www.Dispose();
             return null;
         }
         else
         {
-            Debug.Log("POST response: " + www.downloadHandler.text);
-            return www.downloadHandler.text;
+            var response = www.downloadHandler.text;
+            Debug.Log($"POST response: {response}");
+            www.Dispose();
+            return response;
         }
     }
 
@@ -36,12 +39,15 @@ public static class Requests
         if (www.result != UnityWebRequest.Result.Success)
         {
             Debug.Log("Error: " + www.error);
+            www.Dispose();
             return null;
         }
         else
         {
-            Debug.Log("GET response: " + www.downloadHandler.text);
-            return www.downloadHandler.text;
+            var response = www.downloadHandler.text;
+            Debug.Log($"GET response: {response}");
+            www.Dispose();
+            return response;
         }
     }
 }

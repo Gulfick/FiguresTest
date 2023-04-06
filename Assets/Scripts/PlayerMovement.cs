@@ -9,6 +9,13 @@ public class PlayerMovement : MonoBehaviour
     private Coroutine _coroutine;
     private void Update()
     {
+#if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
+        if (Input.touches.Length == 1 && Input.GetTouch(0).phase != TouchPhase.Ended && 
+            !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+        {
+            StartMove();
+        }
+#else
         var hor = Input.GetAxis("Horizontal");
         var ver = Input.GetAxis("Vertical");
         if (hor != 0 || ver != 0)
@@ -20,10 +27,16 @@ public class PlayerMovement : MonoBehaviour
         
         if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
         {
-            if(_coroutine != null)
-                StopCoroutine(_coroutine);
-            _coroutine = StartCoroutine(MoveTo(Camera.main.ScreenToWorldPoint(Input.mousePosition)));
+            StartMove();
         }
+#endif
+    }
+
+    private void StartMove()
+    {
+        if(_coroutine != null)
+            StopCoroutine(_coroutine);
+        _coroutine = StartCoroutine(MoveTo(Camera.main.ScreenToWorldPoint(Input.mousePosition)));
     }
 
     private IEnumerator MoveTo(Vector2 mousePos)
